@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tierColors = {};
     let iconTiers = {};
     let traducoes = {};
-    axios.get('http://localhost:3000/api/tier-colors')
+    axios.get('/api/tier-colors')
         .then(response => {
             tierColors = response.data.tierColors;
             iconTiers = response.data.iconTiers;
