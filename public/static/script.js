@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const div = document.createElement('div');
                                 div.className = 'col';
                                 div.innerHTML = `
-                                    <div class="card-skins" style="height: 165px;">
+                                    <div class="card-skins">
                                         <img class="tier-icon" src="" alt="Tier Icon" style="width: 30px; height: 30px; margin-bottom: 5px;">
                                         <img src="https://media.valorant-api.com/weaponskins/${uuid}/displayicon.png" class="card-img-top" alt="Skin" loading="lazy">
                                         <div class="card-body-info text-center">
