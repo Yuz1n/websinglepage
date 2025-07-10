@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 
-app.use(express.static(__dirname));
+app.use(express.static('static'));
 
 TIER_COLORS = {
     "12683d76-48d7-84a3-4e09-6985794f0445": [52, 67, 84],
