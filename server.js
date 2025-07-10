@@ -87,6 +87,10 @@ app.get('/api/:id', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/static/index.html');
+});
+
 // Catch-all for debugging 404s
 app.use((req, res) => {
     console.log(`404: Requested path: ${req.path}`);

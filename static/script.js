@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao carregar tier colors:', error);
         })
         .finally(() => {
-            axios.get('http://localhost:3000/api/traducoes')
+            axios.get('/api/traducoes')
                 .then(response => {
                     traducoes = response.data.traducoes;
                 })
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .finally(() => {
                     // Fetch account data
-                    axios.get(`http://localhost:3000/api/${id}`)
+                    axios.get(`/api/${id}`)
                         .then(response => {
                             const item = response.data.item;
                             console.log(item)
