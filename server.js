@@ -87,6 +87,7 @@ app.get('/api/:id', async (req, res) => {
     }
 });
 
+// Rota padrão para a raiz
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/static/index.html');
 });
