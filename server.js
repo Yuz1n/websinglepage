@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 
-app.use(express.static('static'));
+app.use(express.static(path.join(__dirname, 'static')));
 
 TIER_COLORS = {
     "12683d76-48d7-84a3-4e09-6985794f0445": [52, 67, 84],
@@ -89,7 +89,7 @@ app.get('/api/:id', async (req, res) => {
 
 // Rota padrão para a raiz
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/static/index.html');
+    res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
 // Catch-all for debugging 404s
