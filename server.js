@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 require('dotenv').config();
 
+console.log('Serving static files from:', path.join(__dirname, 'static'));
 app.use(express.static(path.join(__dirname, 'static')));
 
 TIER_COLORS = {
@@ -95,7 +96,6 @@ app.get('/', (req, res) => {
 
 // Catch-all for debugging 404s
 app.use((req, res) => {
-    console.log(`404: Requested path: ${req.path}`);
     res.status(404).json({ error: 'Endpoint not found' });
 });
 
