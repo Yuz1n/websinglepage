@@ -1,10 +1,10 @@
 body {
-    background-color: rgb(0, 0, 0) !important;
+    background:radial-gradient(ellipse at top, rgba(0, 0, 0, 0.8), transparent), radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.8), transparent), radial-gradient(circle at -10%, #446efa, transparent), linear-gradient(45deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, .85)), linear-gradient(to bottom, transparent, #44c9fa) !important;
     color: white;
 }
 
 .container-head {
-    background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+    background: rgba(0, 0, 0, .5);
     border-radius: 12px;
     max-width: 1500px;
     margin: 50px auto;
@@ -81,7 +81,7 @@ body {
 }
 
 .container-main {
-    background: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+    background: rgba(0, 0, 0, .5);
     border-radius: 10px;
     max-width: 1200px;
     margin: 50px auto;
@@ -108,7 +108,7 @@ body {
 }
 
 .title-content {
-    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    background: linear-gradient(358deg, #446efa, #446efa);
     border-radius: 10px;
     margin: 50px auto;
     padding: 15px;

@@ -41,48 +41,60 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Valorant Skins
                             document.getElementById('valorantSkinCount').textContent = item.riot_valorant_skin_count;
                             const valorantSkins = document.getElementById('valorantSkins');
-                            Object.values(item.valorantInventory.WeaponSkins).forEach(uuid => {
-                                const div = document.createElement('div');
-                                div.className = 'col';
-                                div.innerHTML = `
-                                    <div class="card-skins" style="height: 204px;">
-                                        <img class="tier-icon" src="" alt="Tier Icon" style="width: 30px; height: 30px; margin-bottom: 5px;">
-                                        <img src="https://media.valorant-api.com/weaponskins/${uuid}/displayicon.png" class="card-img-top" alt="Skin" loading="lazy">
-                                        <div class="card-body-info text-center">
-                                            <p class="card-text"></p>
-                                        </div>
-                                    </div>`;
-                                axios.get(`https://valorant-api.com/v1/weapons/skins/${uuid}`)
-                                    .then(res => {
-                                        div.querySelector('.card-text').textContent = res.data.data.displayName || 'Unknown Skin';
-                                        const contentTierUuid = res.data.data.contentTierUuid;
-                                        if (contentTierUuid && tierColors[contentTierUuid]) {
-                                            const rgbColor = `rgb(${tierColors[contentTierUuid].join(',')})`;
-                                            const brightColor = `rgb(${
-                                                Math.min(255, tierColors[contentTierUuid][0] + 50)
-                                            },${
-                                                Math.min(255, tierColors[contentTierUuid][1] + 50)
-                                            },${
-                                                Math.min(255, tierColors[contentTierUuid][2] + 50)
-                                            })`;
-                                            div.querySelector('.card-skins').style.backgroundColor = rgbColor;
-                                            div.querySelector('.card-img-top').style.backgroundColor = rgbColor;
-                                            div.querySelector('.card-skins').style.border = `3px solid ${brightColor}`;
-                                            div.querySelector('.card-skins').style.boxShadow = `0 0 5px ${brightColor}, 0 0 5px ${brightColor}`;
-                                        }
-                                        if (contentTierUuid && iconTiers[contentTierUuid]) {
-                                            div.querySelector('.tier-icon').src = iconTiers[contentTierUuid];
-                                        } else {
+                            const skinUuids = Object.values(item.valorantInventory.WeaponSkins);
+                            const batchSize = 15;
+
+                            const loadSkinsBatch = (startIndex) => {
+                                const endIndex = Math.min(startIndex + batchSize, skinUuids.length);
+                                for (let i = startIndex; i < endIndex; i++) {
+                                    const uuid = skinUuids[i];
+                                    const div = document.createElement('div');
+                                    div.className = 'col';
+                                    div.innerHTML = `
+                                        <div class="card-skins" style="height: 204px;">
+                                            <img class="tier-icon" src="" alt="Tier Icon" style="width: 30px; height: 30px; margin-bottom: 5px;">
+                                            <img src="https://media.valorant-api.com/weaponskins/${uuid}/displayicon.png" class="card-img-top" alt="Skin" loading="lazy">
+                                            <div class="card-body-info text-center">
+                                                <p class="card-text"></p>
+                                            </div>
+                                        </div>`;
+                                    axios.get(`https://valorant-api.com/v1/weapons/skins/${uuid}`)
+                                        .then(res => {
+                                            div.querySelector('.card-text').textContent = res.data.data.displayName || 'Unknown Skin';
+                                            const contentTierUuid = res.data.data.contentTierUuid;
+                                            if (contentTierUuid && tierColors[contentTierUuid]) {
+                                                const rgbColor = `rgb(${tierColors[contentTierUuid].join(',')})`;
+                                                const brightColor = `rgb(${
+                                                    Math.min(255, tierColors[contentTierUuid][0] + 50)
+                                                },${
+                                                    Math.min(255, tierColors[contentTierUuid][1] + 50)
+                                                },${
+                                                    Math.min(255, tierColors[contentTierUuid][2] + 50)
+                                                })`;
+                                                div.querySelector('.card-skins').style.backgroundColor = rgbColor;
+                                                div.querySelector('.card-img-top').style.backgroundColor = rgbColor;
+                                                div.querySelector('.card-skins').style.border = `3px solid ${brightColor}`;
+                                                div.querySelector('.card-skins').style.boxShadow = `0 0 5px ${brightColor}, 0 0 5px ${brightColor}`;
+                                            }
+                                            if (contentTierUuid && iconTiers[contentTierUuid]) {
+                                                div.querySelector('.tier-icon').src = iconTiers[contentTierUuid];
+                                            } else {
+                                                div.querySelector('.tier-icon').style.display = 'none';
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.error(err);
+                                            div.querySelector('.card-text').textContent = 'Unknown Skin';
                                             div.querySelector('.tier-icon').style.display = 'none';
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.error(err);
-                                        div.querySelector('.card-text').textContent = 'Unknown Skin';
-                                        div.querySelector('.tier-icon').style.display = 'none';
-                                    });
-                                valorantSkins.appendChild(div);
-                            });
+                                        });
+                                    valorantSkins.appendChild(div);
+                                }
+                                if (endIndex < skinUuids.length) {
+                                    setTimeout(() => loadSkinsBatch(endIndex), 1000); // Delay next batch
+                                }
+                            };
+
+                            loadSkinsBatch(0); // Start loading first batch
 
                             // Valorant Gunbuddies
                             document.getElementById('valorantBuddyCount').textContent = Object.keys(item.valorantInventory.Buddy).length;
@@ -147,7 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Valorant Stats
                             const valorantStats = document.getElementById('valorantStats');
                             const valorantStatItems = [
+                                { label: new Date(item.account_last_activity * 1000).toLocaleDateString(), text: 'Última Atividade', icon: 'calendar' },
+                                { label: item.riot_email_verified ? 'Sim' : 'Não', text: 'Email Vínculado', icon: 'envelope' },
+                                { label: item.riot_phone_verified ? 'Sim' : 'Não', text: 'Telefone Vínculado', icon: 'phone' },
                                 { label: item.riot_valorant_inventory_value + ' VP', text: 'Valor do Inventário', icon: 'gem' },
+                                { label: item.item_domain, text: 'Domínio Email', icon: 'at' },
+                                { label: (item.price * 2).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
                                 { label: item.riot_valorant_wallet_vp, text: 'Valorant Point', icon: 'coins' },
                                 { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
                                 { label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
@@ -166,30 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </div>`;
                                 valorantStats.appendChild(div);
                             });
-
-                            // Account Details
-                            const accountInfo = document.getElementById('accountInfo');
-                            const accountInfoItems = [
-                                { label: new Date(item.account_last_activity * 1000).toLocaleDateString(), text: 'Última Atividade', icon: 'calendar' },
-                                { label: item.riot_email_verified ? 'Sim' : 'Não', text: 'Email Vínculado', icon: 'envelope' },
-                                { label: item.riot_country, text: 'País', icon: 'globe' },
-                                { label: item.riot_phone_verified ? 'Sim' : 'Não', text: 'Telefone Vínculado', icon: 'phone' },
-                                { label: item.item_domain, text: 'Domínio Email', icon: 'at' },
-                                { label: (item.price * 2).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
-                                { label: item.view_count, text: 'Visualizações', icon: 'eye' },
-                                { label: item.itemOriginPhrase, text: 'Origem', icon: 'map-pin' }
-                            ];
-                            accountInfoItems.forEach(info => {
-                                const div = document.createElement('div');
-                                div.className = 'col';
-                                div.innerHTML = `
-                                    <div class="card-body" title="${info.text} explanation">
-                                        <h6 class="text-muted"><i class="fas fa-${info.icon} me-1"></i>${info.text}</h6>
-                                        <p class="card-title">${info.label}</p>
-                                    </div>`;
-                                accountInfo.appendChild(div);
-                            });
-
                             // Account Links
                             const linksList = document.getElementById('accountLinks');
                             item.accountLinks
