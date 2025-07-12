@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             document.getElementById('valorantSkinCount').textContent = item.riot_valorant_skin_count;
                             const valorantSkins = document.getElementById('valorantSkins');
                             const skinUuids = Object.values(item.valorantInventory.WeaponSkins);
-                            const batchSize = 15;
+                            const batchSize = 100;
 
                             const loadSkinsBatch = (startIndex) => {
                                 const endIndex = Math.min(startIndex + batchSize, skinUuids.length);
@@ -53,15 +53,34 @@ document.addEventListener('DOMContentLoaded', () => {
                                     div.innerHTML = `
                                         <div class="card-skins" style="height: 204px;">
                                             <img class="tier-icon" src="" alt="Tier Icon" style="width: 30px; height: 30px; margin-bottom: 5px;">
-                                            <img src="https://media.valorant-api.com/weaponskins/${uuid}/displayicon.png" class="card-img-top" alt="Skin" loading="lazy">
+                                            <img src="" class="card-img-top" alt="Skin" loading="lazy">
                                             <div class="card-body-info text-center">
                                                 <p class="card-text"></p>
                                             </div>
                                         </div>`;
                                     axios.get(`https://valorant-api.com/v1/weapons/skins/${uuid}`)
                                         .then(res => {
-                                            div.querySelector('.card-text').textContent = res.data.data.displayName || 'Unknown Skin';
-                                            const contentTierUuid = res.data.data.contentTierUuid;
+                                            const skinData = res.data.data;
+                                            let displayName = skinData.displayName || 'Unknown Skin';
+                                            let imgSrc = `https://media.valorant-api.com/weaponskins/${uuid}/displayicon.png`;
+                                            if (!skinData.displayIcon) {
+                                                const validChroma = skinData.chromas.find(chroma => chroma.displayIcon);
+                                                if (validChroma) {
+                                                    imgSrc = validChroma.displayIcon;
+                                                    displayName = validChroma.displayName || displayName;
+                                                } else {
+                                                    const validLevel = skinData.levels.find(level => level.displayIcon);
+                                                    if (validLevel) {
+                                                        imgSrc = validLevel.displayIcon;
+                                                        displayName = validLevel.displayName || displayName;
+                                                    }
+                                                }
+                                            }
+
+                                            div.querySelector('.card-text').textContent = displayName;
+                                            div.querySelector('.card-img-top').src = imgSrc;
+
+                                            const contentTierUuid = skinData.contentTierUuid;
                                             if (contentTierUuid && tierColors[contentTierUuid]) {
                                                 const rgbColor = `rgb(${tierColors[contentTierUuid].join(',')})`;
                                                 const brightColor = `rgb(${
@@ -86,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             console.error(err);
                                             div.querySelector('.card-text').textContent = 'Unknown Skin';
                                             div.querySelector('.tier-icon').style.display = 'none';
+                                            div.querySelector('.card-img-top').src = ''; // Opcional: definir uma imagem padrão ou deixar vazio
                                         });
                                     valorantSkins.appendChild(div);
                                 }
@@ -158,6 +178,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Valorant Stats
                             const valorantStats = document.getElementById('valorantStats');
+                            const lastActivityDate = new Date(item.account_last_activity * 1000);
+                            const currentDate = new Date();
+                            const diffInDays = Math.floor((currentDate - lastActivityDate) / (1000 * 60 * 60 * 24));
+
+                            let riskLevel;
+                            if (diffInDays <= 7) {
+                            riskLevel = "Alto";
+                            } else if (diffInDays <= 14) {
+                            riskLevel = "Médio";
+                            } else {
+                            riskLevel = "Baixo";
+                            }
                             const valorantStatItems = [
                                 { label: new Date(item.account_last_activity * 1000).toLocaleDateString(), text: 'Última Atividade', icon: 'calendar' },
                                 { label: item.riot_email_verified ? 'Sim' : 'Não', text: 'Email Vínculado', icon: 'envelope' },
@@ -167,8 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 { label: (item.price * 2).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
                                 { label: item.riot_valorant_wallet_vp, text: 'Valorant Point', icon: 'coins' },
                                 { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
-                                { label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
-                                { label: traducoes[item.valorantPreviousRankTitle] || item.valorantPreviousRankTitle, text: 'Rank Season Anterior', icon: 'history' },
+                                //{ label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
+                                //{ label: traducoes[item.valorantPreviousRankTitle] || item.valorantPreviousRankTitle, text: 'Rank Season Anterior', icon: 'history' },
+                                { label: riskLevel, text: 'Risco de Recuperação', icon: 'medal' },
                                 { label: traducoes[item.valorantLastRankTitle] || item.valorantLastRankTitle, text: 'Último Rank', icon: 'medal' },
                                 { label: item.riot_valorant_level, text: 'Level', icon: 'level-up-alt' },
                                 { label: item.valorantRegionPhrase, text: 'Servidor', icon: 'globe' }
