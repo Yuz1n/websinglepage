@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 { label: item.riot_phone_verified ? 'Sim' : 'Não', text: 'Telefone Vínculado', icon: 'phone' },
                                 { label: item.riot_valorant_inventory_value + ' VP', text: 'Valor do Inventário', icon: 'gem' },
                                 //{ label: item.item_domain, text: 'Domínio Email', icon: 'at' },
-                                { label: (item.price * 2).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
+                                { label: (item.price * 1.3).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
                                 { label: item.riot_valorant_wallet_vp, text: 'Valorant Point', icon: 'coins' },
                                 { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
                                 //{ label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
