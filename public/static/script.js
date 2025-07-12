@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
                                 //{ label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
                                 //{ label: traducoes[item.valorantPreviousRankTitle] || item.valorantPreviousRankTitle, text: 'Rank Season Anterior', icon: 'history' },
-                                { label: riskLevel, text: 'Risco de Recuperação', icon: 'medal' },
+                                { label: riskLevel, text: 'Risco de Recuperação', icon: 'exclamation-triangle' },
                                 { label: traducoes[item.valorantLastRankTitle] || item.valorantLastRankTitle, text: 'Último Rank', icon: 'medal' },
                                 { label: item.riot_valorant_level, text: 'Level', icon: 'level-up-alt' },
                                 { label: item.valorantRegionPhrase, text: 'Servidor', icon: 'globe' }
