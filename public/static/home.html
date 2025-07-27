@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hype Accounts - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="static/styles-home.css" />
+    <script src="/static/home.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="static/assets/logo.jpeg" alt="Logo" class="logo" />
+            <h1>Hype Accounts</h1>
+            <p class="subtitle">A melhor e mais confiável loja de contas para Valorant</p>
+        </div>
+
+        <!-- BOTÃO DE CATEGORIA 
+        <div class="category-button">
+            <button class="valorant-button">
+                <img src="https://seeklogo.com/images/V/valorant-logo-FAB2CA0E55-seeklogo.com.png" alt="Valorant" class="valorant-icon">
+                Valorant
+            </button>
+        </div> -->
+
+        <div id="loadingSpinner" class="loading-container-home">
+            <div class="spinner-border-home"></div>
+        </div>
+
+        <!-- LISTAGEM DAS CONTAS -->
+        <div id="contasContainer" class="contas-container"></div>
+
+        <div id="pagination" class="pagination">
+            <button id="prevPage" disabled>Anterior</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Próximo</button>
+        </div>
+
+        <!-- BENEFÍCIOS -->
+        <div class="benefits">
+            <div class="benefit-card">
+                <div class="benefit-icon">🛡️</div>
+                <h3>Segurança Garantida</h3>
+                <p>Todas as contas são verificadas e garantidas</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">⚡</div>
+                <h3>Entrega Instantânea</h3>
+                <p>Dados da conta - <span class="highlight">Imediatamente</span> após a compra</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎧</div>
+                <h3>Suporte 24/7</h3>
+                <p>Atendimento rápido e eficiente pelo Discord</p>
+            </div>
+        </div>
+
+        <!-- BOTÃO DO DISCORD -->
+        <div class="discord-button">
+            <a href="https://discord.gg/hypecommunity" class="discord-link">
+                <i class="fab fa-discord discord-icon"></i> Acesse Nosso Discord
+            </a>
+        </div>
+    </div>
+</body>
+</html>
