@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingSpinner.style.display = 'flex';
         container.style.display = 'none';
         container.innerHTML = '';
-        axios.get(`/api/accounts?page=${page}`)
+        axios.get(`/api/accounts?page=${page}&limit=8`)
             .then(res => {
                 console.log('Resposta recebida:', res.data);
                 const { accounts, totalPages } = res.data;
