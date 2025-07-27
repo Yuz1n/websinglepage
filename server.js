@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const cors = require('cors');
 app.use(cors({
-  origin: 'https://hypecommunity.com.br'
+  origin: 'https://hypecommunity.com.br', 'https://websinglepage.vercel.app/'
 }));
 
 app.get('/api/accounts', async (req, res) => {
