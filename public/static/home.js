@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>Localizando a conta, basta efetuar a compra.</p>
                         </div>
                     </div>
-                    <div class="step payment-step">
+                    <!-- <div class="step payment-step">
                         <h4>Tutorial de como comprar em nosso servidor!</h4>
                         <div class="video-container">
                             <iframe src="https://www.youtube.com/embed/xWyoEMJpILg" title="Tutorial de Compra" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="discord-button">
-                    <a href="https://discord.com/invite/your-discord-link" class="discord-link"><i class="fab fa-discord discord-icon"></i> Acesse Nosso Discord</a>
+                    <a href="https://discord.gg/T435Ajj9Ba" class="discord-link"><i class="fab fa-discord discord-icon"></i> Acesse Nosso Discord</a>
                 </div>
             </div>
         `;
