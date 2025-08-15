@@ -127,13 +127,23 @@ body {
     color: #0ff;
 }
 
-.discord-button {
+.action-button {
     text-align: center;
-    margin: 30px 0;
+    margin: 10px 0px 10px 0px;;
 }
 
 .discord-link {
     background-color: #5865F2;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.id-link {
+    background-color: #f5c33c;
     color: white;
     padding: 12px 24px;
     border-radius: 8px;

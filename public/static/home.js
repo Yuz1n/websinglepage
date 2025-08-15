@@ -37,7 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div> -->
                 </div>
-                <div class="discord-button">
+                <div class="action-button">
+                    <button class="id-link" onclick="navigator.clipboard.writeText('${accountId}')"><i class="fas fa-copy"></i> Copiar ID</button>
+                </div>
+                <div class="action-button">
                     <a href="https://discord.gg/T435Ajj9Ba" class="discord-link"><i class="fab fa-discord discord-icon"></i> Acesse Nosso Discord</a>
                 </div>
             </div>

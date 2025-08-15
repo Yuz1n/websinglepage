@@ -89,7 +89,7 @@ app.get('/api/skin', async (req, res) => {
 
 app.get('/api/:id', async (req, res) => {
     try {
-        const response = await axios.get(`https://apigeral.squareweb.app/account/search?id=${req.params.id}`, {
+        const response = await axios.get(`https://apigeral.squareweb.app/account/search?id=${req.params.id}&db_name=hype`, {
             headers: {
                 accept: 'application/json',
                 authorization: `Bearer ${process.env.API_TOKEN}`
