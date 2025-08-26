@@ -12,6 +12,21 @@ app.use(cors({
   origin: ['https://hypecommunity.com.br', 'https://websinglepage.vercel.app']
 }));
 
+app.get('/api/lucro', async (req, res) => {
+    try {
+        const response = await axios.get(`https://apigeral.squareweb.app/config/lucro`, {
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.API_TOKEN}`
+            }
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching accounts:', error.message);
+        res.status(500).json({ error: 'Failed to fetch accounts from external API' });
+    }
+});
+
 app.get('/api/accounts', async (req, res) => {
     try {
         const response = await axios.get(`https://apigeral.squareweb.app/account/search?${req._parsedUrl.query}&db_name=hype`, {

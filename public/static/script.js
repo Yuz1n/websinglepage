@@ -196,51 +196,60 @@ document.addEventListener('DOMContentLoaded', () => {
                                             const currentDate = new Date();
                                             const diffInDays = Math.floor((currentDate - lastActivityDate) / (1000 * 60 * 60 * 24));
 
-                                            let riskLevel;
-                                            if (diffInDays <= 7) {
-                                            riskLevel = "Alto";
-                                            } else if (diffInDays <= 14) {
-                                            riskLevel = "Médio";
-                                            } else {
-                                            riskLevel = "Baixo";
-                                            }
-                                            const valorantStatItems = [
-                                                { label: new Date(item.account_last_activity * 1000).toLocaleDateString(), text: 'Última Atividade', icon: 'calendar' },
-                                                { label: item.riot_email_verified ? 'Sim' : 'Não', text: 'Email Vínculado', icon: 'envelope' },
-                                                { label: item.riot_phone_verified ? 'Sim' : 'Não', text: 'Telefone Vínculado', icon: 'phone' },
-                                                { label: item.riot_valorant_inventory_value + ' VP', text: 'Valor do Inventário', icon: 'gem' },
-                                                //{ label: item.item_domain, text: 'Domínio Email', icon: 'at' },
-                                                { label: (item.price * 1.3).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
-                                                { label: item.riot_valorant_wallet_vp, text: 'Valorant Point', icon: 'coins' },
-                                                { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
-                                                //{ label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
-                                                //{ label: traducoes[item.valorantPreviousRankTitle] || item.valorantPreviousRankTitle, text: 'Rank Season Anterior', icon: 'history' },
-                                                { label: riskLevel, text: 'Risco de Recuperação', icon: 'exclamation-triangle' },
-                                                { label: traducoes[item.valorantLastRankTitle] || item.valorantLastRankTitle, text: 'Último Rank', icon: 'medal' },
-                                                { label: item.riot_valorant_level, text: 'Level', icon: 'level-up-alt' },
-                                                { label: item.valorantRegionPhrase, text: 'Servidor', icon: 'globe' }
-                                            ];
-                                            valorantStatItems.forEach(stat => {
-                                                const div = document.createElement('div');
-                                                div.className = 'col';
-                                                div.innerHTML = `
-                                                    <div class="card-body">
-                                                        <h6 class="text-muted"><i class="fas fa-${stat.icon} me-1"></i>${stat.text}</h6>
-                                                        <p class="card-title">${stat.label}</p>
-                                                    </div>`;
-                                                valorantStats.appendChild(div);
-                                            });
-                                            // Account Links
-                                            const linksList = document.getElementById('accountLinks');
-                                            item.accountLinks
-                                                .filter(link => link.iconClass === 'valorant')
-                                                .forEach(link => {
-                                                    const div = document.createElement('div');
-                                                    div.innerHTML = `
-                                                        <a href="${link.link}" target="_blank" class="link-btn">
-                                                            <i class="fas fa-link"></i>${link.text}
-                                                        </a>`;
-                                                    linksList.appendChild(div);
+                                            axios.get('/api/lucro')
+                                                .then(response => {
+                                                    lucroData = response.data;
+                                                })
+                                                .catch(error => {
+                                                    console.error('Erro ao carregar lucro:', error);
+                                                })
+                                                .finally(() => {
+                                                    let riskLevel;
+                                                    if (diffInDays <= 7) {
+                                                    riskLevel = "Alto";
+                                                    } else if (diffInDays <= 14) {
+                                                    riskLevel = "Médio";
+                                                    } else {
+                                                    riskLevel = "Baixo";
+                                                    }
+                                                    const valorantStatItems = [
+                                                        { label: new Date(item.account_last_activity * 1000).toLocaleDateString(), text: 'Última Atividade', icon: 'calendar' },
+                                                        { label: item.riot_email_verified ? 'Sim' : 'Não', text: 'Email Vínculado', icon: 'envelope' },
+                                                        { label: item.riot_phone_verified ? 'Sim' : 'Não', text: 'Telefone Vínculado', icon: 'phone' },
+                                                        { label: item.riot_valorant_inventory_value + ' VP', text: 'Valor do Inventário', icon: 'gem' },
+                                                        //{ label: item.item_domain, text: 'Domínio Email', icon: 'at' },
+                                                        { label: (item.price + (item.price * lucroData/100)).toFixed(2) + ' ' + item.price_currency.toUpperCase(), text: 'Preço', icon: 'tag' },
+                                                        { label: item.riot_valorant_wallet_vp, text: 'Valorant Point', icon: 'coins' },
+                                                        { label: item.riot_valorant_wallet_rp, text: 'Radiant Point', icon: 'star' },
+                                                        //{ label: traducoes[item.valorantRankTitle] || item.valorantRankTitle, text: 'Rank Atual', icon: 'trophy' },
+                                                        //{ label: traducoes[item.valorantPreviousRankTitle] || item.valorantPreviousRankTitle, text: 'Rank Season Anterior', icon: 'history' },
+                                                        { label: riskLevel, text: 'Risco de Recuperação', icon: 'exclamation-triangle' },
+                                                        { label: traducoes[item.valorantLastRankTitle] || item.valorantLastRankTitle, text: 'Último Rank', icon: 'medal' },
+                                                        { label: item.riot_valorant_level, text: 'Level', icon: 'level-up-alt' },
+                                                        { label: item.valorantRegionPhrase, text: 'Servidor', icon: 'globe' }
+                                                    ];
+                                                    valorantStatItems.forEach(stat => {
+                                                        const div = document.createElement('div');
+                                                        div.className = 'col';
+                                                        div.innerHTML = `
+                                                            <div class="card-body">
+                                                                <h6 class="text-muted"><i class="fas fa-${stat.icon} me-1"></i>${stat.text}</h6>
+                                                                <p class="card-title">${stat.label}</p>
+                                                            </div>`;
+                                                        valorantStats.appendChild(div);
+                                                    });
+                                                    // Account Links
+                                                    const linksList = document.getElementById('accountLinks');
+                                                    item.accountLinks
+                                                        .filter(link => link.iconClass === 'valorant')
+                                                        .forEach(link => {
+                                                            const div = document.createElement('div');
+                                                            div.innerHTML = `
+                                                                <a href="${link.link}" target="_blank" class="link-btn">
+                                                                    <i class="fas fa-link"></i>${link.text}
+                                                                </a>`;
+                                                            linksList.appendChild(div);
+                                                        });
                                                 });
                                         })
                                         .catch(error => {

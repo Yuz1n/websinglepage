@@ -76,43 +76,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevPageBtn.disabled = page === 1;
                 nextPageBtn.disabled = page === total_Pages;
 
-                accounts.forEach(acc => {
-                    const card = document.createElement('div');
-                    card.className = 'account-card';
-                    const lastLoginDate = new Date(acc.account_last_activity * 1000).toLocaleDateString('pt-BR');
+                axios.get('/api/lucro')
+                    .then(lucroRes => {
+                        const lucroData = lucroRes.data;
+                        accounts.forEach(acc => {
+                            const card = document.createElement('div');
+                            card.className = 'account-card';
+                            const lastLoginDate = new Date(acc.account_last_activity * 1000).toLocaleDateString('pt-BR');
 
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <div class="rank-info">
-                                <img src="static/assets/riot.png" alt="${acc.valorantRankTitle || 'Sem ranque'}" class="tier-icon" />
-                                <div>${acc.valorantRankTitle || 'Sem ranque'}</div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p><i class="fas fa-level-up-alt"></i> <strong>Nível:</strong> ${acc.riot_valorant_level}</p>
-                            <p><i class="fas fa-coins"></i> <strong>VP:</strong> ${acc.riot_valorant_wallet_vp}</p>
-                            <p><i class="fas fa-star"></i> <strong>RP:</strong> ${acc.riot_valorant_wallet_rp}</p>
-                            <p><i class="fas fa-paint-brush"></i> <strong>Skins:</strong> ${acc.riot_valorant_skin_count}</p>
-                            <p><i class="fas fa-calendar"></i> <strong>Último login:</strong> ${lastLoginDate}</p>
-                        </div>
-                        <div class="card-footer">
-                            <span class="price">R$ ${(acc.price * 1.3).toFixed(2)}</span>
-                            <div>
-                                <button class="buy-button" data-id="${acc.id}"><i class="fas fa-shopping-cart buy-icon"></i> Comprar</button>
-                                <a href="/?id=${acc.id}" class="details-button"><i class="fas fa-info-circle details-icon"></i> Detalhes</a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
+                            card.innerHTML = `
+                                <div class="card-header">
+                                    <div class="rank-info">
+                                        <img src="static/assets/riot.png" alt="${acc.valorantRankTitle || 'Sem ranque'}" class="tier-icon" />
+                                        <div>${acc.valorantRankTitle || 'Sem ranque'}</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p><i class="fas fa-level-up-alt"></i> <strong>Nível:</strong> ${acc.riot_valorant_level}</p>
+                                    <p><i class="fas fa-coins"></i> <strong>VP:</strong> ${acc.riot_valorant_wallet_vp}</p>
+                                    <p><i class="fas fa-star"></i> <strong>RP:</strong> ${acc.riot_valorant_wallet_rp}</p>
+                                    <p><i class="fas fa-paint-brush"></i> <strong>Skins:</strong> ${acc.riot_valorant_skin_count}</p>
+                                    <p><i class="fas fa-calendar"></i> <strong>Último login:</strong> ${lastLoginDate}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="price">R$ ${(acc.price + (acc.price * lucroData/100) ).toFixed(2)}</span>
+                                    <div>
+                                        <button class="buy-button" data-id="${acc.id}"><i class="fas fa-shopping-cart buy-icon"></i> Comprar</button>
+                                        <a href="/?id=${acc.id}" class="details-button"><i class="fas fa-info-circle details-icon"></i> Detalhes</a>
+                                    </div>
+                                </div>
+                            `;
+                            container.appendChild(card);
 
-                    // Adicionar evento de clique ao botão "Comprar"
-                    card.querySelector('.buy-button').addEventListener('click', () => {
-                        showBuyModal(acc.id);
+                            card.querySelector('.buy-button').addEventListener('click', () => {
+                                showBuyModal(acc.id);
+                            });
+                        });
+
+                        loadingSpinner.style.display = 'none';
+                        container.style.display = 'grid';
+                    })
+                    .catch(err => {
+                        console.error('Erro ao buscar dados de lucro:', err);
+                        container.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar dados de lucro.</p>';
+                        loadingSpinner.style.display = 'none';
+                        container.style.display = 'block';
                     });
-                });
-
-                loadingSpinner.style.display = 'none';
-                container.style.display = 'grid';
             })
             .catch(err => {
                 console.error(err);
