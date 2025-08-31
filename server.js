@@ -12,9 +12,13 @@ app.use(cors({
   origin: ['https://hypecommunity.com.br', 'https://websinglepage.vercel.app']
 }));
 
-app.get('/api/lucro', async (req, res) => {
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'static', 'assets', 'favicon.ico'));
+});
+
+app.get('/api/lucro/:id', async (req, res) => {
     try {
-        const response = await axios.get(`https://apigeral.squareweb.app/config/lucro`, {
+        const response = await axios.get(`https://apigeral.squareweb.app/account/lucro?id=${req.params.id}`, {
             headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${process.env.API_TOKEN}`
@@ -29,7 +33,7 @@ app.get('/api/lucro', async (req, res) => {
 
 app.get('/api/accounts', async (req, res) => {
     try {
-        const response = await axios.get(`https://apigeral.squareweb.app/account/search?${req._parsedUrl.query}&db_name=hype`, {
+        const response = await axios.get(`https://apigeral.squareweb.app/account/search?${req._parsedUrl.query}&db_name=general`, {
             headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${process.env.API_TOKEN}`
@@ -104,7 +108,7 @@ app.get('/api/skin', async (req, res) => {
 
 app.get('/api/:id', async (req, res) => {
     try {
-        const response = await axios.get(`https://apigeral.squareweb.app/account/search?id=${req.params.id}&db_name=hype`, {
+        const response = await axios.get(`https://apigeral.squareweb.app/account/search?id=${req.params.id}&db_name=general`, {
             headers: {
                 accept: 'application/json',
                 authorization: `Bearer ${process.env.API_TOKEN}`

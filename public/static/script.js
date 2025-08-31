@@ -196,9 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                             const currentDate = new Date();
                                             const diffInDays = Math.floor((currentDate - lastActivityDate) / (1000 * 60 * 60 * 24));
 
-                                            axios.get('/api/lucro')
+                                            axios.get(`/api/lucro/${id}`)
                                                 .then(response => {
-                                                    lucroData = response.data;
+                                                    console.log(response)
+                                                    lucroData = response.data.lucro;
                                                 })
                                                 .catch(error => {
                                                     console.error('Erro ao carregar lucro:', error);

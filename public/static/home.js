@@ -30,12 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>Localizando a conta, basta efetuar a compra.</p>
                         </div>
                     </div>
-                    <!-- <div class="step payment-step">
-                        <h4>Tutorial de como comprar em nosso servidor!</h4>
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/xWyoEMJpILg" title="Tutorial de Compra" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-                        </div>
-                    </div> -->
                 </div>
                 <div class="action-button">
                     <button class="id-link" onclick="navigator.clipboard.writeText('${accountId}')"><i class="fas fa-copy"></i> Copiar ID</button>
@@ -47,12 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(modal);
 
-        // Fechar o modal ao clicar no "X"
         modal.querySelector('.close-modal').addEventListener('click', () => {
             modal.remove();
         });
 
-        // Fechar o modal ao clicar fora do conteúdo
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.remove();
@@ -76,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevPageBtn.disabled = page === 1;
                 nextPageBtn.disabled = page === total_Pages;
 
-                axios.get('/api/lucro')
-                    .then(lucroRes => {
-                        const lucroData = lucroRes.data;
-                        accounts.forEach(acc => {
+                accounts.forEach(acc => {
+                    axios.get(`/api/lucro/${acc.id}`)
+                        .then(lucroRes => {
+                            const lucroData = lucroRes.data.lucro;
                             const card = document.createElement('div');
                             card.className = 'account-card';
                             const lastLoginDate = new Date(acc.account_last_activity * 1000).toLocaleDateString('pt-BR');
@@ -99,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p><i class="fas fa-calendar"></i> <strong>Último login:</strong> ${lastLoginDate}</p>
                                 </div>
                                 <div class="card-footer">
-                                    <span class="price">R$ ${(acc.price + (acc.price * lucroData/100) ).toFixed(2)}</span>
+                                    <span class="price">R$ ${(acc.price + (acc.price * lucroData / 100)).toFixed(2)}</span>
                                     <div>
                                         <button class="buy-button" data-id="${acc.id}"><i class="fas fa-shopping-cart buy-icon"></i> Comprar</button>
                                         <a href="/?id=${acc.id}" class="details-button"><i class="fas fa-info-circle details-icon"></i> Detalhes</a>
@@ -111,20 +103,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             card.querySelector('.buy-button').addEventListener('click', () => {
                                 showBuyModal(acc.id);
                             });
+                        })
+                        .catch(err => {
+                            console.error(`Erro ao buscar dados de lucro para conta ${acc.id}:`, err);
+                            container.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar dados de lucro.</p>';
                         });
+                });
 
-                        loadingSpinner.style.display = 'none';
-                        container.style.display = 'grid';
-                    })
-                    .catch(err => {
-                        console.error('Erro ao buscar dados de lucro:', err);
-                        container.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar dados de lucro.</p>';
-                        loadingSpinner.style.display = 'none';
-                        container.style.display = 'block';
-                    });
+                loadingSpinner.style.display = 'none';
+                container.style.display = 'grid';
             })
             .catch(err => {
-                console.error(err);
+                console.error('Erro ao buscar contas:', err);
                 loadingSpinner.style.display = 'none';
                 container.style.display = 'block';
                 container.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar contas recentes.</p>';
